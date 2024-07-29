@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lens Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            text-align: left;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+        td {
+            text-align: center;
+        }
+        #chart {
+            margin: 20px auto;
+            display: block;
+        }
+        .button-container {
+            margin: 20px auto;
+        }
+        .button-container button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .button-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h2>Lens Details</h2>
+
+    <table id="lensDetails">
+        <tr><th>ID</th><td id="lensId"></td></tr>
+        <tr><th>Name</th><td id="lensName"></td></tr>
+        <tr><th>R-Squared</th><td id="lensRSquared"></td></tr>
+        <tr><th>Transmission Average</th><td id="lensTransmissionAvg"></td></tr>
+        <tr><th>Eye Protection Factor</th><td id="lensEyeProtectionFactor"></td></tr>
+        <tr><th>Melatonin Production Factor</th><td id="lensMelatoninProductionFactor"></td></tr>
+        <tr><th>Glare Reduction Factor</th><td id="lensGlareReductionFactor"></td></tr>
+    </table>
+
+    <canvas id="chart" width="800" height="400"></canvas>
+
+    <button class="back-button" onclick="goBack()">Back to Home</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        window.onload = function() {
+            // Retrieve lens data from localStorage
+            const lens = JSON.parse(localStorage.getItem('lensData'));
+
+            if (lens) {
+                displayLensDetails(lens);
+                drawChart(lens.transmissions, lens.rsquared);
+                localStorage.removeItem('lensData'); // Clear lens data after use
+            } else {
+                alert('No lens data found.');
+                window.location.href = 'home.html'; // Redirect back to home if no data
+            }
+        };
+
+        function displayLensDetails(lens) {
+            document.getElementById('lensId').textContent = lens.id;
+            document.getElementById('lensName').textContent = lens.name;
+            document.getElementById('lensRSquared').textContent = lens.rsquared;
+            document.getElementById('lensTransmissionAvg').textContent = lens.transmissionAvg;
+            document.getElementById('lensEyeProtectionFactor').textContent = lens.eyeProtectionFactor;
+            document.getElementById('lensMelatoninProductionFactor').textContent = lens.melatoninProductionFactor;
+            document.getElementById('lensGlareReductionFactor').textContent = lens.glareReductionFactor;
+        }
+
+        function drawChart(transmissions, rSquared) {
+            const ctx = document.getElementById('chart').getContext('2d');
+            const wavelengths = Array.from({ length: transmissions.length }, (_, i) => 380 + i * 10);
+
+            const linearRegression = (x, y) => {
+                const n = x.length;
+                const sumX = x.reduce((a, b) => a + b, 0);
+                const sumY = y.reduce((a, b) => a + b, 0);
+                const sumXY = x.reduce((sum, xi, i) => sum + xi * y[i], 0);
+                const sumX2 = x.reduce((sum, xi) => sum + xi * xi, 0);
+                const meanX = sumX / n;
+                const meanY = sumY / n;
+
+                const slope = (sumXY - sumX * meanY) / (sumX2 - sumX * meanX);
+                const intercept = meanY - slope * meanX;
+
+                const predictedY = x.map(xi => intercept + slope * xi);
+                const ssTotal = y.reduce((sum, yi) => sum + (yi - meanY) ** 2, 0);
+                const ssResidual = y.reduce((sum, yi, i) => sum + (yi - predictedY[i]) ** 2, 0);
+                const rSquaredCalculated = 1 - ssResidual / ssTotal;
+
+                return { slope, intercept, rSquaredCalculated };
+            };
+
+            const { slope, intercept, rSquaredCalculated } = linearRegression(wavelengths, transmissions);
+            const trendline = wavelengths.map(wavelength => intercept + slope * wavelength);
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: wavelengths,
+                    datasets: [{
+                        label: 'Transmission',
+                        data: transmissions,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2,
+                        fill: false
+                    }, {
+                        label: `Trendline (R² = ${rSquaredCalculated.toFixed(2)})`,
+                        data: trendline,
+                        borderColor: 'rgba(255, 105, 180, 1)',
+                        borderWidth: 2,
+                        borderDash: [10, 5],
+                        fill: false
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Wavelength (nm)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Transmission (%)'
+                            },
+                            min: 0,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            document.getElementById('chart').style.display = 'block';
+        }
+
+        function goBack() {
+            window.location.href = 'home.html'; // Navigate back to home page
+        }
+    </script>
+</body>
+</html>

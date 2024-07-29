@@ -20,27 +20,25 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @SuppressWarnings("deprecation")
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(authorizeRequests -> 
-                authorizeRequests
-                    .requestMatchers("/login", "/register").permitAll()
-                    .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/login")
-                .defaultSuccessUrl("/", true) // Redirect to home page after login
-                .permitAll()
-            )
-            .exceptionHandling(exceptions -> exceptions
-                .accessDeniedPage("/error") // Custom error page
-            )
-            .logout(logout -> logout
-                .logoutSuccessUrl("/login?logout") // Redirect after logout
-                .permitAll()
-            );
-        return http.build();
+        .authorizeRequests(authorizeRequests ->
+            authorizeRequests
+                .requestMatchers("/register").permitAll() // Allow access to registration page
+                .requestMatchers("/login").permitAll()   // Allow access to login page
+                .anyRequest().authenticated()
+        )
+        .formLogin(form -> form
+            .loginPage("/login")
+            .defaultSuccessUrl("/", true)
+            .permitAll()
+        )
+        .logout(logout -> logout
+            .permitAll()
+        );
+    return http.build();
     }
 
     @Bean

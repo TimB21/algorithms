@@ -65,7 +65,14 @@
 <body>
     <div class="container">
         <h1>Login</h1>
-        <form action="/login" method="post">
+
+         <!-- Display success message if present -->
+        <div th:if="${successMessage}" class="success-message">
+            <p th:text="${successMessage}"></p>
+        </div> 
+
+        <form action="/login" method="post" th:action="@{/login}" th:object="${user}">
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
             <br>

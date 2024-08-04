@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserRepository {
+
+     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -33,13 +37,16 @@ public class UserRepository {
     }
 
     public void createUser(User user) {
+        log.info("Inserting user: " + user);
         int rowsAffected = jdbcTemplate.update(
-            "INSERT INTO users (id, username, password) VALUES (?, ?, ?)",
-            0, user.getUsername(), user.getPassword()
+            "INSERT INTO users (username, password_hash) VALUES (?, ?)",
+            user.getUsername(), user.getPassword()
         );
-
-        assert rowsAffected == 1 : "Failed to insert user with ID: " + user.getId();
-    }
+    
+        if (rowsAffected != 1) {
+            throw new RuntimeException("Failed to insert user");
+        }
+    }    
 
     public void updateUser(User user, int id) {
         int rowsAffected = jdbcTemplate.update(

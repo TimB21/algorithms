@@ -26,18 +26,21 @@ public class SecurityConfig {
         http
         .authorizeRequests(authorizeRequests ->
             authorizeRequests
-                .requestMatchers("/register").permitAll() // Allow access to registration page
-                .requestMatchers("/login").permitAll()   // Allow access to login page
-                .anyRequest().authenticated()
+            .requestMatchers("/account", "/error", "/register").permitAll() 
+            .anyRequest().authenticated()
+            .and()
         )
         .formLogin(form -> form
-            .loginPage("/login")
-            .defaultSuccessUrl("/", true)
+            .loginPage("/account")
             .permitAll()
         )
         .logout(logout -> logout
             .permitAll()
-        );
+        )
+        .exceptionHandling(exceptions -> 
+            exceptions
+            .accessDeniedPage("/error") // Custom error page
+        );    
     return http.build();
     }
 

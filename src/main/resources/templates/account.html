@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 0.7rem 2rem;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        a {
+            display: block;
+            margin-top: 1rem;
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .message {
+            color: red;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Registration Form -->
+
+        <div th:if="${action == 'register'}">
+            <h1>Register</h1>
+            <form th:action="@{/register}" method="post" th:object="${user}">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                <label for="username">Username:</label>
+                <input type="text" id="username" th:field="*{username}" />
+                
+                <label for="password">Password:</label>
+                <input type="password" id="password" th:field="*{password}" />
+                
+                <button type="submit">Register</button>
+            </form> 
+
+            <a href="?action=login">Already have an account? Login</a>
+        </div>
+
+        <!-- Login Form -->
+        <div th:if="${action == 'login'}">
+            <h1>Login</h1>
+
+            <!-- Display success message if present -->
+            <div th:if="${successMessage}" class="success-message">
+                <p th:text="${successMessage}"></p>
+            </div>
+
+            <form action="#" th:action="@{/login}" method="post" th:object="${user}">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                
+                <button type="submit">Login</button>
+            </form>
+            <div class="links">
+                <p>Don't have an account? <a href="?action=register">Register here</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

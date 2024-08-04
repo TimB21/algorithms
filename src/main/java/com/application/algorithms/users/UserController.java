@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -107,9 +108,16 @@ public class UserController {
         }
     }
 
-    @GetMapping("/login")
-    public String loginPage() {
-        return "login.html"; // This should match the name of your login HTML file
+    @GetMapping("/account")
+    public String accountPage(@RequestParam(name = "action", defaultValue = "login") String action, Model model) {
+        if ("register".equals(action)) {
+            model.addAttribute("user", new User());
+            model.addAttribute("action", "register");
+        } else {
+            model.addAttribute("user", new User());
+            model.addAttribute("action", "login");
+        }
+        return "account"; // This should match the name of your combined HTML file
     }
 
     @PostMapping("/login")
@@ -126,30 +134,23 @@ public class UserController {
         }
     }
 
-
-    @GetMapping("/register")
-    public String registerPage() { 
-        System.out.println("Accessing /register");
-        return "register"; // This should match the name of your registration HTML file
-    } 
-
-    
     @PostMapping("/register")
     public String register(@ModelAttribute @Valid User user, BindingResult result, RedirectAttributes redirectAttributes) {
         log.info("Received User object: {}", user);
         
         if (result.hasErrors()) {
             log.error("Validation errors: {}", result.getAllErrors());
-            return "register"; // Return to registration page with validation errors
+            return "account"; // Return to combined page with validation errors
         }
         
         try {
             userService.registerUser(user); // Handle user registration
             redirectAttributes.addFlashAttribute("successMessage", "Registration successful! Please log in.");
-            return "redirect:/login"; // Redirect after successful registration
+            return "redirect:/account?action=login"; // Redirect to login form after successful registration
         } catch (Exception e) {
             log.error("Registration error: {}", e.getMessage());
-            return "register"; // Return to registration page with error
+            return "account"; // Return to combined page with error
         }
     }
 }
+

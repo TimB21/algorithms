@@ -56,22 +56,6 @@ The system is designed to analyze and store lens transmission and absorption spe
 - **Jackson**: For JSON processing.
 - **JUnit** (planned): For testing and ensuring code quality.
 
----
-# Lens Repository Management System
-
-This Java Spring Boot application manages a repository of lens data, demonstrating skills in backend development, web technologies, and database management. The system provides CRUD functionality for lenses and supports user authentication via PostgreSQL.
-
----
-
-## Features
-
-- Manage lens data with attributes such as **transmissions** and **absorption spectrum**.
-- CRUD operations on lenses via RESTful APIs.
-- Secure user authentication with hashed passwords.
-- Relational database design with PostgreSQL.
-
----
-
 ## Key Design Choices
 
 ### **Lens Table**:

@@ -1,116 +1,80 @@
-# Lens Analysis and Repository Management System
+# Lens Quality Analysis and Repository Management System
 
-## **Introduction**
+## Introduction
 
-Welcome to the Lens Analysis and Repository Management System! This project demonstrates the development of a web-based application for managing lens data, showcasing expertise in **Java**, **Spring Boot**, **SQL**, and web technologies such as **HTML**, **CSS**, and **JavaScript**. 
+Welcome to the **Lens Quality Analysis and Repository Management System**! This project demonstrates the development of a web-based application for managing lens data, showcasing expertise in **Java**, **Spring Boot**, **SQL**, and web technologies such as **HTML**, **CSS**, and **JavaScript**.
 
 The system is designed to analyze and store lens transmission and absorption spectrum data, providing users with CRUD functionality and an intuitive API to manage their data.
 
 ---
 
-## **Features**
+## Core Features
 
-### Lens Management
-- **Create**: Add new lenses with details such as name, transmissions, and absorption spectrum.
-- **Read**: Retrieve lenses by ID or list all available lenses in the database.
-- **Update**: Modify existing lens records.
+### Lens Quality Analysis
+
+- **Transmission Spectrum Analysis**: Analyzes transmission data across wavelengths to determine how much light passes through the lens.
+- **Absorption Spectrum Analysis**: Evaluates absorption patterns to assess eye protection capabilities.
+
+**Performance Metrics Calculation:**
+
+- **R² (Coefficient of Determination)**: Measures the linear relationship between wavelength and transmission.
+- **Melatonin Production Factor (MPF)**: Evaluates blue light blocking efficiency to support melatonin production.
+- **Eye Protection Factor (EPF)**: Assesses the lens's UV protection based on UV light absorption.
+- **Glare Reduction Factor (GRF)**: Quantifies the lens's effectiveness in reducing glare.
+
+### Lens Data Management
+
+- **Create**: Add new lenses with transmission and absorption data.
+- **Read**: Retrieve and view lens records.
+- **Update**: Modify existing lens entries.
 - **Delete**: Remove lens records securely.
 
-### User Authentication
-- Secure user registration and login with password hashing.
-- Each lens record is associated with a user, ensuring data security and access control.
-
 ### Scalable APIs
-- RESTful endpoints for seamless interaction with the system.
-- Supports file uploads for bulk lens data processing.
+
+- **RESTful endpoints** for interacting with lens data.
+- **Support for bulk data uploads** via file import.
 
 ### Database Integrity
-- Designed with relational integrity between `users` and `lens` tables.
-- Cascade delete ensures data consistency when users are removed.
+
+- **Relational design** with user-lens associations.
+- **Cascade delete** ensures consistency when users are removed.
 
 ---
 
-## **Technologies Used**
+## Technologies Used
 
 ### Backend
-- **Java Spring Boot**:
-  - Dependency Injection for modular and clean code.
-  - RESTful API development.
-  - Integration with PostgreSQL for data persistence.
-  
-- **PostgreSQL**:
-  - Efficient and secure storage for lens and user data.
-  - Foreign key constraints for relational integrity.
 
-- **SQL**:
-  - Schema design and query optimization.
-  - Advanced use of constraints and cascades for security.
+- **Java Spring Boot**: Core application logic with dependency injection.
+- **PostgreSQL**: Database management for lens and user data.
+- **SQL**: Query optimization and schema design.
 
 ### Frontend
-- **HTML, CSS, and JavaScript**:
-  - User-friendly interface design.
-  - Dynamic and interactive web components for better usability.
+
+- **HTML, CSS, JavaScript**: User-friendly web interface with dynamic elements.
 
 ### Supporting Libraries
-- **SLF4J**: For logging and monitoring.
-- **Jackson**: For JSON processing.
-- **JUnit** (planned): For testing and ensuring code quality.
 
-## Key Design Choices
+- **SLF4J**: Logging and monitoring.
+- **Jackson**: JSON parsing and processing.
+- **JUnit**: Unit testing.
 
-### **Lens Table**:
-- Contains lens attributes, including:
-  - `transmissions`: Comma-separated numerical values.
-  - `absorption_spectrum`: Comma-separated numerical values.
-    
 ---
+
+## How It Works
+
+1. **Lens Object Initialization**: A Lens object is created with spectrophotometer data.
+2. **Data Segmentation**: The application isolates key wavelength ranges to compute metrics like MPF, EPF, and GRF.
+3. **Statistical Analysis**: Linear regression calculates R² values and other performance metrics.
+4. **Database Operations**: Users can create, retrieve, update, and delete lens data through the web interface.
+5. **API Interaction**: Developers can access the lens data programmatically via RESTful endpoints.
+
 
 ## Skills Demonstrated
 
-- **Java Development**: Implemented backend logic using Spring Boot with clean architecture principles.
-- **SQL Expertise**: Designed relational database schemas and executed advanced queries.
-- **Web Development**: Created user interfaces using HTML, CSS, and JavaScript.
-- **RESTful API Design**: Enabled seamless interaction and scalability.
-- **Data Validation**: Ensured data integrity during CRUD operations.
-- **Secure Programming**: Implemented hashed password storage and role-based access control.
-
----
-
-## Setup and Usage
-
-### **Prerequisites**
-- **Java** (JDK 11 or later).
-- **Maven** for building the project.
-- **PostgreSQL** as the database.
-
-## Future Enhancements
-
-- **Frontend Framework**:
-  - Develop a modern UI with React or Angular for improved user experience.
-
-- **Authentication Enhancements**:
-  - Add JWT-based authentication for secure token-based management.
-
-- **Data Analysis Tools**:
-  - Integrate analytical tools for lens quality evaluation and visualization.
-
-- **Unit Testing**:
-  - Write comprehensive test cases with JUnit.
-
-- **Cloud Deployment**:
-  - Deploy the application on cloud platforms like AWS or Heroku.
-
----
-
-## Conclusion
-
-This project demonstrates proficiency in:
-
-- **Backend Development**: Spring Boot implementation with clean architecture.
-- **Database Management**: PostgreSQL for relational data handling.
-- **Web Development**: Leveraging HTML, CSS, and JavaScript for frontend interfaces.
-- **RESTful API Design**: Supporting CRUD operations with scalable architecture.
-
-The Lens Repository Management System serves as a robust foundation for further development and highlights full-stack development capabilities.
-
+- **Java Development**: Spring Boot implementation with modular architecture.
+- **SQL Expertise**: Optimized database queries and relational integrity.
+- **Web Development**: Interactive interface using JavaScript and responsive design principles.
+- **Machine Learning Integration**: Regression analysis applied to optical data.
+- **RESTful API Design**: Built scalable, maintainable API endpoints.
 
